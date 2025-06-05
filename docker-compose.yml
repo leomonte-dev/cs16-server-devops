@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  cs16:
+    build: .
+    container_name: cs16
+    ports:
+      - "27015:27015/udp"
+      - "27005:27005/udp"
+      - "26900:26900/udp"
+    restart: unless-stopped
