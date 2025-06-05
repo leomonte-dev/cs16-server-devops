@@ -1,0 +1,37 @@
+# Ignora arquivos temporários do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.bak
+
+# Docker
+*.tar
+*.pid
+*.sock
+
+# Arquivos de build local (por segurança)
+hlds/
+steamcmd/
+steamapps/
+home/steam/hlds/
+home/steam/steamcmd/
+
+# GitHub Actions (se gerar cache)
+.github/workflows/*.bak
+.github/workflows/*.log
+
+# Binários e executáveis que podem aparecer
+*.exe
+*.out
+*.bin
+
+# Arquivos de shell que não fazem parte do projeto
+*.swp
+*.swo
+
+# Evita commit de volumes/dados persistentes, se usados
+volumes/
+data/
