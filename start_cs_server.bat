@@ -1,30 +1,33 @@
 @echo off
 setlocal
 
-echo Verificando se o Docker está instalado...
-docker --version >nul 2>&1
+:: Valores padrão
+set MAP=de_dust2
+set MAXPLAYERS=12
+
+:: Se o usuário passou parâmetros, sobrescreve
+if not "%1"=="" set MAP=%1
+if not "%2"=="" set MAXPLAYERS=%2
+
+echo Iniciando servidor CS 1.6 com:
+echo    Mapa: %MAP%
+echo    Max Players: %MAXPLAYERS%
+
+:: Roda o docker-compose com as variáveis
+set MAXPLAYERS=%MAXPLAYERS%
+set MAP=%MAP%
+docker-compose up -d
+
 if errorlevel 1 (
-    echo ERRO: Docker nao encontrado. Instale o Docker e tente novamente.
+    echo ERRO ao iniciar o servidor.
     pause
     exit /b 1
 )
 
-echo Parando container antigo (se existir)...
-docker stop cs1.6_server >nul 2>&1
-docker rm cs1.6_server >nul 2>&1
-
-echo Baixando a imagem mais recente do servidor CS 1.6...
-docker pull monte019/cs16-server:latest
-
-echo Iniciando o container do servidor CS 1.6...
-docker run -d --name cs1.6_server -p 27015:27015/tcp -p 27015:27015/udp monte019/cs16-server:latest
-
-if errorlevel 1 (
-    echo Falha ao iniciar o container Docker.
-    pause
-    exit /b 1
-)
-
-echo Servidor CS 1.6 iniciado com sucesso!
-echo Para conectar, use o IP desta maquina e a porta 27015.
+echo Servidor iniciado com sucesso!
+echo Para conectar, use o IP desta máquina e a porta 27015.
+echo Mapa atual: %MAP%
+echo Max Players: %MAXPLAYERS%
+echo Use 'docker-compose down' para parar o servidor.
+powershell -ExecutionPolicy Bypass -File mostrar-ip.ps1
 pause
