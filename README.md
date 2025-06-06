@@ -1,8 +1,26 @@
-# 🚀 Servidor CS 1.6 via Docker
+## 🚀 Servidor CS 1.6 via Docker
 
 > 💡 Após iniciar o servidor com `start_cs_server.bat`, o CS 1.6 ficará acessível pela porta `27015` do seu IP local ou WSL2.
 
----
+## ⚡ Como rodar
+    1. Clonar repositório
+    git clone https://github.com/leomonte-dev/cs16-server-docker.git
+    cd cs16-server-docker
+
+
+    3. Iniciar servidor
+    start_cs_server.bat
+
+    (Opcional: start_cs_server.bat <mapa> <max_jogadores>)
+
+
+    4. Conectar ao servidor
+    Abra o CS 1.6
+
+    No console do jogo, use:
+    connect IP_DO_SERVIDOR:27015
+
+    (Substitua pelo IP mostrado após executar o bat)
 
 ## 🔌 Informações de Conexão
 
@@ -82,26 +100,6 @@ Conexão estável para download inicial (~500MB)
 
 
 
-⚡ Como rodar
-1. Clonar repositório
-bash
-git clone https://github.com/leomonte-dev/cs16-server-docker.git
-cd cs16-server-docker
-
-
-3. Iniciar servidor
-start_cs_server.bat
-(Opicional: start_cs_server.bat <mapa> <max_jogadores>)
-
-
-4. Conectar ao servidor
-Abra o CS 1.6
-No console do jogo, use:
-connect IP_DO_SERVIDOR:27015
-(Substitua pelo IP mostrado no script mostrar-ip.ps1)
-
-
-
 🛠️ Personalização Avançada
 Variável	Descrição	Valores Exemplo
 
@@ -113,18 +111,17 @@ SV_LAN	Modo LAN (0=Internet, 1=LAN)	0 ou 1
 
 
 
-
 ❓ Troubleshooting
 Problemas comuns e soluções:
 Conexão recusada?
 
 powershell
-# Liberar porta no firewall
+## Liberar porta no firewall
 New-NetFirewallRule -DisplayName "CS16 Server" -Direction Inbound -Protocol TCP -LocalPort 27015 -Action Allow
 Servidor não aparece na LAN?
 
 yaml
-# No docker-compose.override.yml altere:
+## No docker-compose.override.yml altere:
 +sv_lan: "1"
 
 
