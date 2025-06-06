@@ -1,8 +1,7 @@
-# 🚀 Servidor CS 1.6 via Docker
+## 🚀 Servidor CS 1.6 via Docker
 
 > 💡 Após iniciar o servidor com `start_cs_server.bat`, o CS 1.6 ficará acessível pela porta `27015` do seu IP local ou WSL2.
 
----
 
 ## 🔌 Informações de Conexão
 
@@ -21,13 +20,13 @@ Comandos para conectar no console do CS 1.6:
 connect 192.168.1.100:27015    (IP do Windows)
 connect 172.25.14.201:27015    (IP do WSL2)
 
-### 🔄 Alternativas para verificar IPs
+🔄 Alternativas para verificar IPs
 Windows: ipconfig (procure por "Ethernet" ou "Wi-Fi")
 
 WSL2: wsl hostname -I
 
 
-### 🧱 O que está incluso
+🧱 O que está incluso
 Dockerfile: Imagem Docker com HLDS + CS 1.6 otimizada
 
 docker-compose.yml: Configuração padrão com portas mapeadas
@@ -42,7 +41,7 @@ mostrar-ip.ps1: Script para identificar IPs de conexão
 
 
 
-### ⚙️ Configurações Padrão
+⚙️ Configurações Padrão
 docker-compose.override.yml
 yaml
 version: "3.8"
@@ -73,7 +72,7 @@ MAXPLAYERS=12
 MAP=de_dust2
 
 
-### 🖥️ Requisitos
+🖥️ Requisitos
 Docker Desktop (com WSL2 integrado se usar Linux)
 
 2 GB RAM livre (recomendado)
@@ -82,7 +81,7 @@ Conexão estável para download inicial (~500MB)
 
 
 
-### ⚡ Como rodar
+⚡ Como rodar
 1. Clonar repositório
 bash
 git clone https://github.com/leomonte-dev/cs16-server-docker.git
@@ -102,7 +101,7 @@ connect IP_DO_SERVIDOR:27015
 
 
 
-### 🛠️ Personalização Avançada
+🛠️ Personalização Avançada
 Variável	Descrição	Valores Exemplo
 
 MAXPLAYERS	Número máximo de jogadores	12, 16, 32
@@ -114,17 +113,17 @@ SV_LAN	Modo LAN (0=Internet, 1=LAN)	0 ou 1
 
 
 
-### ❓ Troubleshooting
+❓ Troubleshooting
 Problemas comuns e soluções:
 Conexão recusada?
 
 powershell
-# Liberar porta no firewall
+## Liberar porta no firewall
 New-NetFirewallRule -DisplayName "CS16 Server" -Direction Inbound -Protocol TCP -LocalPort 27015 -Action Allow
 Servidor não aparece na LAN?
 
 yaml
-# No docker-compose.override.yml altere:
+## No docker-compose.override.yml altere:
 +sv_lan: "1"
 
 
