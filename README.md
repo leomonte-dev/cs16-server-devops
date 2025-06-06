@@ -4,8 +4,8 @@
 
 ## ⚡ Como rodar
     1. Clonar repositório
-    git clone https://github.com/leomonte-dev/cs16-server-docker.git
-    cd cs16-server-docker
+    git clone https://github.com/leomonte-dev/cs16-server-devops.git
+    cd cs16-server-devops
 
 
     3. Iniciar servidor
