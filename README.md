@@ -1,6 +1,6 @@
 ## 🚀 Servidor CS 1.6 via Docker
 
-> 💡 Após iniciar o servidor com `start_cs_server.bat`, o CS 1.6 ficará acessível pela porta `27015` do seu IP local ou WSL2.
+> 💡 Após iniciar o servidor com `start_cs_server.bat`, o CS 1.6 ficará acessível pela porta `27015` do seu IP WSL2 e `28015` para IP Ethernet Windows.
 
 ## ⚡ Como rodar
 
@@ -26,7 +26,7 @@
     Abra o CS 1.6
 
     No console do jogo, use:
-    connect IP_DO_SERVIDOR:27015
+    connect IP_DO_SERVIDOR:28015
 
     (Substitua pelo IP mostrado após executar o bat)
 
@@ -44,7 +44,7 @@ IP do Windows: 192.168.1.100 192.168.56.1
 IP do WSL2: 172.25.14.201
 
 Comandos para conectar no console do CS 1.6:
-connect 192.168.1.100:27015    (IP do Windows)
+connect 192.168.1.100:28015    (IP do Windows)
 connect 172.25.14.201:27015    (IP do WSL2)
 
 🔄 Alternativas para verificar IPs
