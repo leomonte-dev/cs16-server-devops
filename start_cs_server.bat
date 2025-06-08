@@ -13,6 +13,9 @@ echo Iniciando servidor CS 1.6 com:
 echo    Mapa: %MAP%
 echo    Max Players: %MAXPLAYERS%
 
+:: Atualiza a imagem antes de rodar o container
+docker-compose pull
+
 :: Roda o docker-compose com as variáveis
 set MAXPLAYERS=%MAXPLAYERS%
 set MAP=%MAP%
