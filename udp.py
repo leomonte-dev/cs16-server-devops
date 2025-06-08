@@ -63,11 +63,13 @@ def proxy_loop():
                 continue
 
             if sock is sock_clients:
-                # Recebe dos players Windows -> encaminha para WSL
+                if data == b"ping":
+                    sock_clients.sendto(b"SUCCESS", addr)
+                    continue  # Não encaminha ping para o WSL
+
                 with clients_lock:
                     clients[addr] = time.time()
                 sock_wsl.sendto(data, (WSL_IP, WSL_PORT))
-
 
             elif sock is sock_wsl:
                 # Recebe do servidor WSL -> encaminha para TODOS players ativos

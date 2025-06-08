@@ -47,17 +47,14 @@ del ip_tmp.txt
 echo IP capturado: [%HOST_IP%]
 
 echo Iniciando proxy UDP para conexoes Windows ...
+
 start "" python udp.py
 
 :: Espera 2 segundos para o proxy subir
-::timeout /t 2 /nobreak >nul
+timeout /t 2 /nobreak >nul
 
-:: Testa UDP Proxy
-::if errorlevel 1 (
-::    echo [ERRO] Proxy UDP nao respondeu. Encerrando container...
-::    docker-compose down
-::    exit /b 1
-::)
+
+
 
 echo Iniciando servidor CS 1.6 com:
 echo    Mapa: %MAP%
@@ -105,5 +102,13 @@ echo Mapa atual: %MAP%
 echo Max Players: %MAXPLAYERS%
 echo Use 'docker-compose down' para parar o servidor.
 powershell -ExecutionPolicy Bypass -File mostrar-ip.ps1
+
+python udp_test.py
+if errorlevel 1 (
+    echo [ERRO] Proxy UDP nao respondeu. Encerrando container...
+    timeout /t 5 /nobreak >nul
+    docker-compose down
+    exit /b 1
+)
 
 pause
