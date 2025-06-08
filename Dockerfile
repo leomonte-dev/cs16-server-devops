@@ -48,7 +48,7 @@ RUN mkdir -p /home/steam/.steam/sdk32 \
 
 # Configurações otimizadas do servidor
 RUN mkdir -p /home/steam/hlds/cstrike \
- && printf "sv_lan 1\nmp_autokick 0\nmp_autoteambalance 0\nsv_region 255\n\
+ && printf "sv_lan 0\nmp_autokick 0\nmp_autoteambalance 0\nsv_region 255\n\
 sv_visiblemaxplayers 12\nnet_public_adr 0.0.0.0\nlog on\n\
 sv_logbans 1\nsv_logecho 1\nsv_logfile 1\n" > /home/steam/hlds/cstrike/server.cfg \
  && touch /home/steam/hlds/cstrike/{listip.cfg,banned.cfg}
@@ -62,4 +62,3 @@ EXPOSE 27015/tcp 27015/udp 27020/udp 26900/udp
 # Entrypoint otimizado
 ENTRYPOINT ["./hlds_run"]
 CMD ["-game", "cstrike", "+maxplayers", "12", "+map", "de_dust2", "+sv_lan", "0", "+ip", "0.0.0.0", "-port", "27015", "+net_public_adr", "0.0.0.0", "-debug"]
-
