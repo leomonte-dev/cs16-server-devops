@@ -1,21 +1,27 @@
 # mostrar-ip.ps1
-$wslIp = (wsl hostname -I).Trim()
-$hostIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { 
-    $_.InterfaceAlias -notlike '*Loopback*' -and $_.IPAddress -like '192.*' 
-}).IPAddress -join ' '  # Junta todos os IPs encontrados separados por espaço
 
-Write-Host "`n=========== Informacoes de Conexão ===========" -ForegroundColor Cyan
-Write-Host "IP do Windows: $hostIp"
+# Pegamos o primeiro IP IPv4 válido que:
+# - NÃO seja Loopback
+# - NÃO seja do WSL (vEthernet)
+# - NÃO seja VirtualBox
+# - E esteja na faixa 192.*
+
+$hostIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object {
+    $_.InterfaceAlias -notmatch 'Loopback|vEthernet|VirtualBox|Teredo|Container' `
+    -and $_.IPAddress -like '192.*'
+} | Select-Object -First 1).IPAddress
+
+# IP do WSL (interno)
+$wslIp = (wsl hostname -I).Trim()
+
+Write-Host "`n=========== Informacoes de Conexao ===========" -ForegroundColor Cyan
+Write-Host "IP do Windows (adaptador fisico): $hostIp"
 Write-Host "IP do WSL2: $wslIp"
 
 if ($hostIp -and $wslIp) {
-    # Pega apenas o primeiro IP se houver múltiplos
-    $firstHostIp = ($hostIp -split ' ')[0]
-    $firstWslIp = ($wslIp -split ' ')[0]
-    
-    Write-Host "`nPara conectar ao servidor, use um dos seguintes comandos no console do CS 1.6:" -ForegroundColor Green
-    Write-Host "connect $firstHostIp`:27015    (IP do Windows)" -ForegroundColor Yellow
-    Write-Host "connect $firstWslIp`:27015    (IP do WSL2)`n" -ForegroundColor Magenta
+    Write-Host "`nPara conectar ao servidor, use um destes comandos no console do CS 1.6:" -ForegroundColor Green
+    Write-Host "connect $hostIp`:27015    (IP do Windows)" -ForegroundColor Yellow
+    Write-Host "connect $wslIp`:27015    (IP do WSL2)`n" -ForegroundColor Magenta
 } else {
     if (-not $hostIp) { Write-Host "⚠️  Não foi possível determinar o IP do Windows." -ForegroundColor Red }
     if (-not $wslIp) { Write-Host "⚠️  Não foi possível determinar o IP do WSL2." -ForegroundColor Red }

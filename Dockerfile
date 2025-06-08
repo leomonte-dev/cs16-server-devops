@@ -61,4 +61,4 @@ EXPOSE 27015/tcp 27015/udp 27020/udp 26900/udp
 
 # Entrypoint otimizado
 ENTRYPOINT ["./hlds_run"]
-CMD ["-game", "cstrike", "+maxplayers", "12", "+map", "de_dust2", "+sv_lan", "0", "+ip", "0.0.0.0", "-port", "27015", "+net_public_adr", "0.0.0.0", "-debug"]
+CMD ["-game", "cstrike", "+maxplayers", "12", "+map", "de_dust2", "+sv_lan", "0", "+ip", "0.0.0.0", "+port", "27015", "+net_public_adr", "0.0.0.0", "-debug"]

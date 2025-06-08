@@ -1,5 +1,5 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
 
 :: Valores padrão
 set MAP=de_dust2
@@ -9,62 +9,47 @@ set MAXPLAYERS=12
 if not "%1"=="" set MAP=%1
 if not "%2"=="" set MAXPLAYERS=%2
 
-:: Pega o IP da interface ativa do Windows (IPv4, não localhost)
-for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "IPv4" ^| findstr /v "127.0.0.1"') do (
-    set ip=%%a
-    goto :gotIP
-)
-:gotIP
-:: Remove espaços no IP
-set ip=%ip: =%
+:: Executa o script PowerShell e salva o IP no arquivo temporário
+powershell -NoProfile -ExecutionPolicy Bypass -File get_host_ip.ps1 > ip_tmp.txt
 
-echo IP detectado: %ip%
+:: Lê o IP do arquivo para variável
+set /p HOST_IP=<ip_tmp.txt
 
-:: Verifica se docker-compose.override.yml existe e lê o IP atual do arquivo
-set fileIP=
-if exist docker-compose.override.yml (
-    for /f "tokens=2 delims=:" %%i in ('findstr /c:"+ip" docker-compose.override.yml') do (
-        set fileIP=%%i
-        goto :foundIP
-    )
-)
-:foundIP
-if defined fileIP (
-    set fileIP=%fileIP: =%
-)
+:: Apaga arquivo temporário
+del ip_tmp.txt
 
-:: Compara IP detectado com IP do arquivo
-if "%ip%"=="%fileIP%" (
-    echo IP nao mudou (%ip%), nao sobrescrevendo docker-compose.override.yml
-) else (
-    echo IP mudou ou arquivo nao existe. Sobrescrevendo docker-compose.override.yml com IP %ip%
-    (
-    echo version: "3.8"
-    echo.
-    echo services:
-    echo.  csserver:
-    echo.    command:
-    echo.      - "-game"
-    echo.      - "cstrike"
-    echo.      - "+maxplayers"
-    echo.      - "%MAXPLAYERS%"
-    echo.      - "+map"
-    echo.      - "%MAP%"
-    echo.      - "+sv_lan"
-    echo.      - "0"
-    echo.      - "+ip"
-    echo.      - "%ip%"
-    echo.      - "+port"
-    echo.      - "27015"
-    echo.      - "-strictportbind"
-    echo.    environment:
-    echo.      MAXPLAYERS: "%MAXPLAYERS%"
-    echo.      MAP: "%MAP%"
-    ) > docker-compose.override.yml
-)
+echo IP capturado: [%HOST_IP%]
+
+echo Iniciando servidor CS 1.6 com:
+echo    Mapa: %MAP%
+echo    Max Players: %MAXPLAYERS%
 
 :: Atualiza a imagem antes de rodar o container
 docker-compose pull
+
+:: Gera docker-compose.override.yml com IP detectado // foi para testes .
+(
+echo version: "3.8"
+echo services:
+echo   csserver:
+echo     command:
+echo       - "-game"
+echo       - "cstrike"
+echo       - "+maxplayers"
+echo       - "%MAXPLAYERS%"
+echo       - "+map"
+echo       - "%MAP%"
+echo       - "+sv_lan"
+echo       - "0"
+echo       - "+ip"
+echo       - "0.0.0.0"
+echo       - "+port"
+echo       - "27015"
+echo       - "-strictportbind"
+echo     environment:
+echo       MAXPLAYERS: "%MAXPLAYERS%"
+echo       MAP: "%MAP%"
+) > docker-compose.override.yml
 
 :: Roda o docker-compose com as variáveis
 docker-compose up -d
@@ -76,7 +61,7 @@ if errorlevel 1 (
 )
 
 echo Servidor iniciado com sucesso!
-echo Para conectar, use o IP %ip% e a porta 27015.
+echo Para conectar, use o IP desta máquina e a porta 27015.
 echo Mapa atual: %MAP%
 echo Max Players: %MAXPLAYERS%
 echo Use 'docker-compose down' para parar o servidor.
