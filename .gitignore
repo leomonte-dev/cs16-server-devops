@@ -1,7 +1,7 @@
 # Ignora arquivos temporários do sistema operacional
 .DS_Store
 Thumbs.db
-udp.py
+.env
 
 # Logs e arquivos temporários
 *.log
