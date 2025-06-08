@@ -3,12 +3,20 @@
 > 💡 Após iniciar o servidor com `start_cs_server.bat`, o CS 1.6 ficará acessível pela porta `27015` do seu IP local ou WSL2.
 
 ## ⚡ Como rodar
-    1. Clonar repositório
+
+    1. Inicie o Docker Desktop
+
+
+    2. Clonar repositório
     git clone https://github.com/leomonte-dev/cs16-server-devops.git
     cd cs16-server-devops
 
 
-    3. Iniciar servidor
+    3. Instalar requisitos
+    pip install -r requirements.txt
+
+
+    4. Iniciar servidor
     start_cs_server.bat
 
     (Opcional: start_cs_server.bat <mapa> <max_jogadores>)

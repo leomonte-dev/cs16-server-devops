@@ -1,5 +1,31 @@
 @echo off
 setlocal
+:: Verifica se Docker está disponível
+docker info >nul 2>&1
+if errorlevel 1 (
+    echo [ERRO] O Docker Desktop nao esta aberto ou nao foi iniciado corretamente.
+    echo Por favor, abra o Docker Desktop e aguarde ele ficar disponivel.
+    pause
+    exit /b 1
+)
+
+:: Verifica se o Python está disponível
+where python >nul 2>&1
+if errorlevel 1 (
+    echo [ERRO] O Python nao esta instalado ou nao esta no PATH.
+    echo Por favor, instale o Python e adicione ao PATH do sistema.
+    pause
+    exit /b 1
+)
+
+
+:: Verifica se o script udp.py existe
+if not exist udp.py (
+    echo [ERRO] O script udp.py nao foi encontrado.
+    echo Por favor, verifique se o arquivo esta no mesmo diretorio do script.
+    pause
+    exit /b 1
+)
 
 :: Valores padrão
 set MAP=de_dust2
@@ -19,6 +45,19 @@ set /p HOST_IP=<ip_tmp.txt
 del ip_tmp.txt
 
 echo IP capturado: [%HOST_IP%]
+
+echo Iniciando proxy UDP para conexoes Windows ...
+start "" python udp.py
+
+:: Espera 2 segundos para o proxy subir
+::timeout /t 2 /nobreak >nul
+
+:: Testa UDP Proxy
+::if errorlevel 1 (
+::    echo [ERRO] Proxy UDP nao respondeu. Encerrando container...
+::    docker-compose down
+::    exit /b 1
+::)
 
 echo Iniciando servidor CS 1.6 com:
 echo    Mapa: %MAP%
@@ -66,4 +105,5 @@ echo Mapa atual: %MAP%
 echo Max Players: %MAXPLAYERS%
 echo Use 'docker-compose down' para parar o servidor.
 powershell -ExecutionPolicy Bypass -File mostrar-ip.ps1
+
 pause

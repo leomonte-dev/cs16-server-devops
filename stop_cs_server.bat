@@ -1,15 +1,15 @@
 @echo off
 setlocal
 
-echo Parando servidor CS 1.6...
+echo Encerrando servidor CS 1.6...
 
 docker-compose down
 
 if errorlevel 1 (
-    echo ERRO ao parar o servidor.
+    echo ERRO ao finalizar servidor.
     pause
     exit /b 1
 )
 
-echo Servidor parado com sucesso.
+echo Servidor finalizado com sucesso.
 pause
