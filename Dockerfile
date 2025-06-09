@@ -41,6 +41,31 @@ RUN ./steamcmd.sh \
     +app_set_config 90 mod cstrike \
     +quit
 
+# Instalar AMX Mod X
+WORKDIR /home/steam
+
+RUN wget https://www.amxmodx.org/amxxdrop/1.9/amxmodx-1.9.0-git5271-base-linux.tar.gz \
+ && tar -xvzf amxmodx-1.9.0-git5271-base-linux.tar.gz \
+ && cp -r amxmodx-1.9.0-base/* /home/steam/hlds/cstrike/ \
+ && rm -rf amxmodx-1.9.0*
+
+# Baixar e instalar o plugin Galileo
+RUN wget -q https://github.com/addonszz/galileo/releases/download/v5.9.1/galileo-v5.9.1.zip \
+ && apt-get update && apt-get install -y unzip && apt-get clean \
+ && unzip galileo-v5.9.1.zip -d galileo \
+ && cp galileo/plugins/galileo.amxx /home/steam/hlds/cstrike/addons/amxmodx/plugins/ \
+ && cp galileo/configs/galileo.cfg /home/steam/hlds/cstrike/addons/amxmodx/configs/ \
+ && echo "galileo.amxx" >> /home/steam/hlds/cstrike/addons/amxmodx/configs/plugins.ini \
+ && rm -rf galileo galileo-v5.9.1.zip
+
+# Desativar plugins antigos (mapchooser, nextmap, timeleft)
+RUN sed -i '/mapchooser.amxx/d' /home/steam/hlds/cstrike/addons/amxmodx/configs/plugins.ini \
+ && sed -i '/nextmap.amxx/d' /home/steam/hlds/cstrike/addons/amxmodx/configs/plugins.ini \
+ && sed -i '/timeleft.amxx/d' /home/steam/hlds/cstrike/addons/amxmodx/configs/plugins.ini
+
+# Adicionar lista de mapas para votação
+RUN echo -e "de_dust2\nde_inferno\nde_nuke\nde_train\nde_aztec" > /home/steam/hlds/cstrike/addons/amxmodx/configs/maps.ini
+
 # Configurar ambiente Steam corretamente
 RUN mkdir -p /home/steam/.steam/sdk32 \
  && cp /home/steam/hlds/steamclient.so /home/steam/.steam/sdk32/ \

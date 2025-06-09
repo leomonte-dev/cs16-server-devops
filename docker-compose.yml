@@ -9,6 +9,8 @@ services:
       - "27015:27015/tcp"
       - "27020:27020/udp"
       - "26900:26900/udp"
+    volumes:
+      - ./configs:/home/steam/hlds/cstrike/addons/amxmodx/configs
     restart: unless-stopped
 
 networks:
