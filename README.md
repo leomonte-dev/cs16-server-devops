@@ -126,5 +126,10 @@ Conexão recusada?
 
 powershell
 ## Liberar porta no firewall
-New-NetFirewallRule -DisplayName "CS16 Server" -Direction Inbound -Protocol TCP -LocalPort 27015 -Action Allow
-Servidor não aparece na LAN?
+New-NetFirewallRule -DisplayName "CS16 TCP Inbound" -Direction Inbound -Protocol TCP -LocalPort 27015 -Action Allow
+New-NetFirewallRule -DisplayName "CS16 TCP Outbound" -Direction Outbound -Protocol TCP -LocalPort 27015 -Action Allow
+New-NetFirewallRule -DisplayName "CS16 UDP Inbound" -Direction Inbound -Protocol UDP -LocalPort 27015 -Action Allow
+New-NetFirewallRule -DisplayName "CS16 UDP Outbound" -Direction Outbound -Protocol UDP -LocalPort 27015 -Action Allow
+New-NetFirewallRule -DisplayName "Proxy UDP Inbound 28015" -Direction Inbound -Protocol UDP -LocalPort 28015 -Action Allow
+New-NetFirewallRule -DisplayName "Proxy UDP Outbound 28015" -Direction Outbound -Protocol UDP -LocalPort 28015 -Action Allow
+
