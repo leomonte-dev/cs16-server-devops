@@ -2,15 +2,13 @@ version: "3.8"
 
 services:
   csserver:
-    container_name: cs1.6_server
-    image: monte019/cs16-server:latest
+    container_name: cs1.6_server-plugin
+    image: monte019/cs1.6-server-plugin:latest
     ports:
       - "27015:27015/udp"
       - "27015:27015/tcp"
       - "27020:27020/udp"
       - "26900:26900/udp"
-    volumes:
-      - ./configs:/home/steam/hlds/cstrike/addons/amxmodx/configs
     restart: unless-stopped
 
 networks:

@@ -3,6 +3,7 @@
 Thumbs.db
 .env
 
+
 # Logs e arquivos temporários
 *.log
 *.tmp
