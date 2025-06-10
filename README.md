@@ -16,18 +16,23 @@
     pip install -r requirements.txt
 
 
-    4. Iniciar servidor
-    start_cs_server.bat
+    4. Editar o "users.ini" em /users-adm-config para definir os ADM do servidor
+    (OBS: comando "status" no console do cs mostra seu Steam ID! )
+    
 
+    5. Editar o ".env.example" para ".env" com as configuracoes locais
+
+
+    6. Iniciar servidor
+    start_cs_server.bat
     (Opcional: start_cs_server.bat <mapa> <max_jogadores>)
 
 
-    4. Conectar ao servidor
+    7. Conectar ao servidor
     Abra o CS 1.6
-
     No console do jogo, use:
-    connect IP_DO_SERVIDOR:28015
 
+    connect IP_DO_WINDOWS:28015 | connect IP_DO_WSL2:27015
     (Substitua pelo IP mostrado após executar o bat)
 
 ## 🔌 Informações de Conexão
@@ -101,22 +106,16 @@ MAP=de_dust2
 
 🖥️ Requisitos
 Docker Desktop (com WSL2 integrado se usar Linux)
-
 2 GB RAM livre (recomendado)
-
 Conexão estável para download inicial (~500MB)
 
 
-
 🛠️ Personalização Avançada
-Variável	Descrição	Valores Exemplo
 
-MAXPLAYERS	Número máximo de jogadores	12, 16, 32
-
-MAP	Mapa inicial	de_dust2, cs_office, de_inferno
-
-SV_LAN	Modo LAN (0=Internet, 1=LAN)	0 ou 1
-
+Variável	     Descrição	                    Valores	     Exemplo
+MAXPLAYERS	   Número máximo de jogadores	                 12, 16, 32
+MAP	           Mapa inicial	                               de_dust2,cs_office,de_inferno
+SV_LAN	       Modo LAN                 (0=Internet, 1=LAN)
 
 
 ❓ Troubleshooting
@@ -127,12 +126,3 @@ powershell
 ## Liberar porta no firewall
 New-NetFirewallRule -DisplayName "CS16 Server" -Direction Inbound -Protocol TCP -LocalPort 27015 -Action Allow
 Servidor não aparece na LAN?
-
-yaml
-## No docker-compose.override.yml altere:
-+sv_lan: "1"
-
-
-Erros no WSL2?
-wsl --shutdown
-docker system prune -a
