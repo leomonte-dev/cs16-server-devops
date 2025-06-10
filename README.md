@@ -35,6 +35,8 @@
     connect IP_DO_WINDOWS:28015 | connect IP_DO_WSL2:27015
     (Substitua pelo IP mostrado após executar o bat)
 
+    <Extra: "amxmodmenu" no console in-game exibe o menu principal do mod>
+
 ## 🔌 Informações de Conexão
 
 ### 🌐 IPs disponíveis
