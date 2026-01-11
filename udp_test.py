@@ -4,9 +4,9 @@ import os
 from dotenv import load_dotenv
 load_dotenv()  # Carrega variáveis de ambiente do arquivo .env
 
-PROXY_IP = "host.docker.internal"  # Ou o IP da sua máquina Windows
+PROXY_IP = "127.0.0.1"  # Ou o IP da sua máquina Windows
 PROXY_PORT = 28015
-TIMEOUT = 2  # segundos
+TIMEOUT = 6  # segundos
 
 try:
     # print(f"[DEBUG] Tentando conectar ao proxy UDP em {PROXY_IP}:{PROXY_PORT}")
