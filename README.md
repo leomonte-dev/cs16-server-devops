@@ -1,135 +1,207 @@
-## 🚀 Servidor CS 1.6 via Docker
+# 🎮 CS 1.6 High Performance Server
 
-> 💡 Após iniciar o servidor com `start_cs_server.bat`, o CS 1.6 ficará acessível pela porta `27015` do seu IP WSL2 e `28015` para IP Ethernet Windows.
+<div align="center">
 
-## ⚡ Como rodar
+![CS 1.6](https://img.shields.io/badge/CS%201.6-Server-orange?style=flat-square)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=flat-square)
+![Tickrate](https://img.shields.io/badge/Tickrate-1000-green?style=flat-square)
 
-    1. Inicie o Docker Desktop
+**Servidor CS 1.6 otimizado com tickrate 1000 e zero lag**
 
+</div>
 
-    2. Clonar repositório
-    git clone https://github.com/leomonte-dev/cs16-server-devops.git
-    cd cs16-server-devops
+---
 
+## 🚀 Como Usar (3 passos)
 
-    3. Instalar requisitos
-    pip install -r requirements.txt
+### 1. **Instalar Requisitos**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [Python 3.8+](https://www.python.org/downloads/)
+- WSL2 (Windows) - [Guia de instalação](https://learn.microsoft.com/pt-br/windows/wsl/install)
 
+### 2. **Configurar**
+```bash
+# Clone o repositório
+git clone https://github.com/leomonte-dev/cs16-server-devops.git
+cd cs16-server-devops
 
-    4. Editar o "users.ini" em /users-adm-config para definir os ADM do servidor
-    (OBS: comando "status" no console do cs mostra seu Steam ID! )
-    
+# Instale dependências
+pip install -r requirements.txt
 
-    5. Editar o ".env.example" para ".env" com as configuracoes locais
+# Configure o IP do WSL
+wsl hostname -I  # Copie o IP
+notepad .env     # Cole: WSL_IP=SEU_IP_AQUI
+```
 
+### 3. **Rodar**
+```bash
+# Iniciar servidor (de_dust2, 12 players)
+start_cs_server.bat
 
-    6. Iniciar servidor
-    start_cs_server.bat
-    (Opcional: start_cs_server.bat <mapa> <max_jogadores>)
+# OU customizar mapa e jogadores
+start_cs_server.bat de_inferno 16
+```
 
+---
 
-    7. Conectar ao servidor
-    Abra o CS 1.6
-    No console do jogo, use:
+## 🎮 Conectar ao Servidor
 
-    connect IP_DO_WINDOWS:28015 | connect IP_DO_WSL2:27015
-    (Substitua pelo IP mostrado após executar o bat)
+Abra o CS 1.6 e no console (`~`):
+```
+connect SEU_IP:28015
+```
 
-    <Extra: "amxmodmenu" no console in-game exibe o menu principal do mod>
+> 💡 Use `.\mostrar-ip.ps1` no PowerShell para ver seus IPs disponíveis
 
-## 🔌 Informações de Conexão
+---
 
-### 🌐 IPs disponíveis
-Execute o script abaixo no PowerShell para ver seus IPs de conexão:
+## ⚙️ Configurações Principais
+
+### **Admins**
+Edite `users-adm-config/users.ini`:
+```ini
+"SeuNick" "STEAM_ID" "abcdefghijklmnopqrstu" "ce"
+```
+> Use `status` no console do CS para ver seu Steam ID
+
+### **Servidor**
+Edite `server.cfg` para customizar:
+```cfg
+hostname "Meu Servidor"
+rcon_password "minhasenha"
+mp_startmoney 16000
+```
+
+---
+
+## 🛠️ Comandos Úteis
+```bash
+# Reiniciar servidor
+restart_cs_server.bat
+
+# Parar servidor
+docker-compose down
+
+# Ver logs
+docker logs cs1.6_server-plugin
+
+# Verificar se está rodando
+docker ps
+```
+
+---
+
+## 🔧 Problemas Comuns
+
+<details>
+<summary><b>❌ Não consigo conectar</b></summary>
+
+**Libere as portas no firewall (PowerShell como Admin):**
 ```powershell
-.\mostrar-ip.ps1
+New-NetFirewallRule -DisplayName "CS16 UDP" -Direction Inbound -Protocol UDP -LocalPort 27015,28015 -Action Allow
+```
 
-Exemplo de saída:
+**Verifique se o container está rodando:**
+```bash
+docker ps
+```
+</details>
 
-=========== Informacoes de Conexão ===========
-IP do Windows: 192.168.1.100 192.168.56.1
-IP do WSL2: 172.25.14.201
+<details>
+<summary><b>❌ Proxy UDP não responde</b></summary>
 
-Comandos para conectar no console do CS 1.6:
-connect 192.168.1.100:28015    (IP do Windows)
-connect 172.25.14.201:27015    (IP do WSL2)
+**Verifique o IP do WSL no .env:**
+```bash
+wsl hostname -I
+type .env
+```
 
-🔄 Alternativas para verificar IPs
-Windows: ipconfig (procure por "Ethernet" ou "Wi-Fi")
+**Inicie o proxy manualmente:**
+```bash
+python udp.py
+```
+</details>
 
-WSL2: wsl hostname -I
+<details>
+<summary><b>❌ Servidor com lag</b></summary>
 
+**Configure seu cliente CS 1.6:**
+```
+cl_updaterate 101
+cl_cmdrate 101
+rate 100000
+fps_max 100
+```
 
-🧱 O que está incluso
-Dockerfile: Imagem Docker com HLDS + CS 1.6 otimizada
+**Dê mais recursos no `docker-compose.yml`:**
+```yaml
+resources:
+  limits:
+    cpus: '4.0'
+    memory: 4G
+```
+</details>
 
-docker-compose.yml: Configuração padrão com portas mapeadas
+<details>
+<summary><b>❌ Comandos AMX não funcionam</b></summary>
 
-docker-compose.override.yml: Personalização do servidor
+**Use RCON ou configure no server.cfg:**
+```
+rcon_password suasenha
+rcon mp_startmoney 16000
+```
 
-.env: Configurações básicas do servidor
+OU adicione no `server.cfg`:
+```cfg
+mp_startmoney 16000
+mp_maxmoney 16000
+```
+</details>
 
-start_cs_server.bat: Inicializador automático para Windows
+---
 
-mostrar-ip.ps1: Script para identificar IPs de conexão
+## ✨ Features
 
+- ✅ Tickrate 1000 + FPS 1000
+- ✅ Network otimizado (sv_maxupdaterate 101)
+- ✅ Proxy UDP com buffers de 8MB
+- ✅ AMX Mod X pré-instalado
+- ✅ Deploy em 1 comando
+- ✅ Scripts de start/restart/stop
 
+---
 
-⚙️ Configurações Padrão
-docker-compose.override.yml
-yaml
-version: "3.8"
+## 📦 Estrutura
+```
+cs16-server-devops/
+├── start_cs_server.bat      # Iniciar
+├── restart_cs_server.bat    # Reiniciar
+├── server.cfg               # Configs do servidor
+├── udp.py                   # Proxy UDP
+├── .env                     # IP do WSL
+└── users-adm-config/
+    └── users.ini            # Admins
+```
 
-services:
-  csserver:
-    command:
-      - "-game"
-      - "cstrike"
-      - "+maxplayers"
-      - "${MAXPLAYERS}"
-      - "+map"
-      - "${MAP}"
-      - "+sv_lan"
-      - "0"
-      - "+ip"
-      - "0.0.0.0"
-      - "-port"
-      - "27015"
-      - "-strictportbind"
-    environment:
-      MAXPLAYERS: "12"
-      MAP: "de_dust2"
+---
 
+## 🤝 Contribuir
 
-.env
-MAXPLAYERS=12
-MAP=de_dust2
+Pull requests são bem-vindos! Para mudanças grandes, abra uma issue primeiro.
 
+---
 
-🖥️ Requisitos
-Docker Desktop (com WSL2 integrado se usar Linux)
-2 GB RAM livre (recomendado)
-Conexão estável para download inicial (~500MB)
+## 📞 Suporte
 
+- 🐛 [Issues](https://github.com/leomonte-dev/cs16-server-devops/issues)
+- 💬 [Discussions](https://github.com/leomonte-dev/cs16-server-devops/discussions)
 
-🛠️ Personalização Avançada
+---
 
-Variável	     Descrição	                    Valores	     Exemplo
-MAXPLAYERS	   Número máximo de jogadores	                 12, 16, 32
-MAP	           Mapa inicial	                               de_dust2,cs_office,de_inferno
-SV_LAN	       Modo LAN                 (0=Internet, 1=LAN)
+<div align="center">
 
+**Feito com ❤️ por [Leonardo Monte](https://github.com/leomonte-dev)**
 
-❓ Troubleshooting
-Problemas comuns e soluções:
-Conexão recusada?
+⭐ Se ajudou, deixe uma estrela!
 
-powershell
-## Liberar porta no firewall
-New-NetFirewallRule -DisplayName "CS16 TCP Inbound" -Direction Inbound -Protocol TCP -LocalPort 27015 -Action Allow
-New-NetFirewallRule -DisplayName "CS16 TCP Outbound" -Direction Outbound -Protocol TCP -LocalPort 27015 -Action Allow
-New-NetFirewallRule -DisplayName "CS16 UDP Inbound" -Direction Inbound -Protocol UDP -LocalPort 27015 -Action Allow
-New-NetFirewallRule -DisplayName "CS16 UDP Outbound" -Direction Outbound -Protocol UDP -LocalPort 27015 -Action Allow
-New-NetFirewallRule -DisplayName "Proxy UDP Inbound 28015" -Direction Inbound -Protocol UDP -LocalPort 28015 -Action Allow
-New-NetFirewallRule -DisplayName "Proxy UDP Outbound 28015" -Direction Outbound -Protocol UDP -LocalPort 28015 -Action Allow
-
+</div>
