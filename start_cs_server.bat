@@ -1,5 +1,6 @@
 @echo off
 setlocal
+
 :: Verifica se Docker está disponível
 docker info >nul 2>&1
 if errorlevel 1 (
@@ -17,7 +18,6 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
-
 
 :: Verifica se o script udp.py existe
 if not exist udp.py (
@@ -45,16 +45,12 @@ set /p HOST_IP=<ip_tmp.txt
 del ip_tmp.txt
 
 echo IP capturado: [%HOST_IP%]
-
 echo Iniciando proxy UDP para conexoes Windows ...
 
 start "" python udp.py
 
-:: Espera 2 segundos para o proxy subir
-timeout /t 2 /nobreak >nul
-
-
-
+:: Espera 3 segundos para o proxy subir (aumentado de 2 para 3)
+timeout /t 3 /nobreak >nul
 
 echo Iniciando servidor CS 1.6 com:
 echo    Mapa: %MAP%
@@ -63,7 +59,7 @@ echo    Max Players: %MAXPLAYERS%
 :: Atualiza a imagem antes de rodar o container
 docker-compose pull
 
-:: Gera docker-compose.override.yml com IP detectado // foi para testes .
+:: Gera docker-compose.override.yml OTIMIZADO
 (
 echo version: "3.8"
 echo services:
@@ -81,6 +77,13 @@ echo       - "+ip"
 echo       - "0.0.0.0"
 echo       - "+port"
 echo       - "27015"
+echo       - "+sys_ticrate"
+echo       - "1000"
+echo       - "+fps_max"
+echo       - "1000"
+echo       - "-pingboost"
+echo       - "3"
+echo       - "-nomaster"
 echo       - "-strictportbind"
 echo     environment:
 echo       MAXPLAYERS: "%MAXPLAYERS%"
@@ -97,10 +100,11 @@ if errorlevel 1 (
 )
 
 echo Servidor iniciado com sucesso!
-echo Para conectar, use o IP desta máquina e a porta 27015.
+echo Para conectar, use o IP desta maquina e a porta 27015.
 echo Mapa atual: %MAP%
 echo Max Players: %MAXPLAYERS%
 echo Use 'docker-compose down' para parar o servidor.
+
 powershell -ExecutionPolicy Bypass -File mostrar-ip.ps1
 
 python udp_test.py
