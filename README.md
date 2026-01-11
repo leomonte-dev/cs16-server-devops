@@ -20,17 +20,29 @@
 - WSL2 (Windows) - [Guia de instalação](https://learn.microsoft.com/pt-br/windows/wsl/install)
 
 ### 2. **Configurar**
+
+**Clone o repositório e instale dependências:**
 ```bash
-# Clone o repositório
 git clone https://github.com/leomonte-dev/cs16-server-devops.git
 cd cs16-server-devops
-
-# Instale dependências
 pip install -r requirements.txt
+```
 
-# Configure o IP do WSL
-wsl hostname -I  # Copie o IP
-notepad .env     # Cole: WSL_IP=SEU_IP_AQUI
+**Configure o ambiente:**
+```bash
+# Descubra o IP do WSL
+wsl hostname -I
+
+# Crie o .env baseado no exemplo
+copy .env.example .env
+
+# Edite o .env com o IP do WSL
+notepad .env
+```
+
+**No arquivo `.env`, substitua `SEU_IP_AQUI` pelo IP do WSL:**
+```env
+WSL_IP=192.168.31.201
 ```
 
 ### 3. **Rodar**
@@ -178,7 +190,8 @@ cs16-server-devops/
 ├── restart_cs_server.bat    # Reiniciar
 ├── server.cfg               # Configs do servidor
 ├── udp.py                   # Proxy UDP
-├── .env                     # IP do WSL
+├── .env.example             # Template de configuração
+├── .env                     # IP do WSL (criar baseado no .example)
 └── users-adm-config/
     └── users.ini            # Admins
 ```
