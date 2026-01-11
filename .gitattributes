@@ -1,0 +1,9 @@
+* text=auto
+*.sh text eol=lf
+*.py text eol=lf
+*.sma text eol=lf
+*.inc text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
